@@ -1,0 +1,48 @@
+package student;
+
+import java.util.Scanner;
+
+public class student {
+    public static void main(String[] args) {
+        int count, i;
+        float totalMarks = 0, percentage, average;
+        Scanner scanner;
+        scanner = new Scanner(System.in);
+ 
+        System.out.println("Enter number of Subject");
+        count = scanner.nextInt();
+ 
+        System.out.println("Enter Marks of " + count + " Subject");
+        for (i = 0; i < count; i++) {
+            totalMarks += scanner.nextInt();
+        }
+ 
+        average = totalMarks / count;
+        System.out.println("The student Grade is: ");
+        if(average>=80)
+        {
+            System.out.println("A");
+        }
+        else if(average>=60 && average<80)
+        {
+           System.out.println("B");
+        } 
+        else if(average>=40 && average<60)
+        {
+            System.out.println("C");
+        }
+        else
+        {
+            System.out.println("D");
+        }
+    
+        // Each subject is of 100 Marks
+        percentage = (totalMarks / (count * 100)) * 100;
+        System.out.println("Total Marks : " + totalMarks);
+        System.out.println("Average Marks : " + average);
+        System.out.println("Percentage : " + percentage);
+    }
+}
+
+
+
