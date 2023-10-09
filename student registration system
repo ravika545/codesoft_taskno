@@ -1,0 +1,158 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Course {
+    private String courseName;
+
+    public Course(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    @Override
+    public String toString() {
+        return courseName;
+    }
+}
+
+class Student {
+    private String firstName;
+    private String lastName;
+    private String studentId;
+    private List<Course> registeredCourses;
+
+    public Student(String firstName, String lastName, String studentId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.studentId = studentId;
+        this.registeredCourses = new ArrayList<>();
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void registerForCourse(Course course) {
+        registeredCourses.add(course);
+    }
+
+    public void dropCourse(Course course) {
+        registeredCourses.remove(course);
+    }
+
+    public List<Course> getRegisteredCourses() {
+        return registeredCourses;
+    }
+
+    @Override
+    public String toString() {
+        return "Student ID: " + studentId + ", Name: " + firstName + " " + lastName + "\nRegistered Courses: " + registeredCourses;
+    }
+}
+
+class StudentRegistration {
+    private List<Student> students;
+
+    public StudentRegistration() {
+        students = new ArrayList<>();
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public List<Student> getAllStudents() {
+        return students;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        StudentRegistration registration = new StudentRegistration();
+
+        while (true) {
+            System.out.println("1. Add Student\n2. List Students\n3. Drop Course\n4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter student first name: ");
+                    String firstName = scanner.nextLine();
+                    System.out.print("Enter student last name: ");
+                    String lastName = scanner.nextLine();
+                    System.out.print("Enter student ID: ");
+                    String studentId = scanner.nextLine();
+
+                    Student student = new Student(firstName, lastName, studentId);
+
+                    // Register for courses
+                    while (true) {
+                        System.out.print("Enter course name (or type 'done' to finish registering courses): ");
+                        String courseName = scanner.nextLine();
+                        if (courseName.equalsIgnoreCase("done")) {
+                            break;
+                        }
+                        Course course = new Course(courseName);
+                        student.registerForCourse(course);
+                    }
+
+                    registration.addStudent(student);
+                    System.out.println("Student added successfully!");
+                    break;
+                case 2:
+                    List<Student> studentList = registration.getAllStudents();
+                    for (Student s : studentList) {
+                        System.out.println(s);
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter student ID to drop a course: ");
+                    String studentIdToDrop = scanner.nextLine();
+                    System.out.print("Enter course name to drop: ");
+                    String courseNameToDrop = scanner.nextLine();
+
+                    Student studentToDrop = null;
+                    for (Student s : registration.getAllStudents()) {
+                        if (s.getStudentId().equals(studentIdToDrop)) {
+                            studentToDrop = s;
+                            break;
+                        }
+                    }
+
+                    if (studentToDrop != null) {
+                        for (Course c : studentToDrop.getRegisteredCourses()) {
+                            if (c.getCourseName().equalsIgnoreCase(courseNameToDrop)) {
+                                studentToDrop.dropCourse(c);
+                                System.out.println("Course dropped successfully!");
+                                break;
+                            }
+                        }
+                    } else {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+                case 4:
+                    System.out.println("Exiting program.");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
